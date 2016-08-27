@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WoopClient.DependencyInjection;
 using WoopClient.Navigation;
 using WoopClient.Services.Api;
 using WoopClient.ViewModels;
@@ -16,14 +17,19 @@ namespace WoopClient
         {
             InitializeComponent();
 
-            Navigation.INavigation navigation = new Navigation.Navigation(this);
+            DependencyResolver.RegisterService<Navigation.Navigation>();
+            DependencyResolver.RegisterService<SchlingelApi>();
+            DependencyResolver.RegisterService<StreamsApi>();
 
-            navigation.RegisterPages<MainPageView, MainPageVM>();
-            navigation.RegisterPages<YouTubeView, MainPageVM>();
 
-            navigation.RegisterService<SchlingelApi>();
-            navigation.RegisterService<StreamsApi>();
-            navigation.Init();
+            Navigation.INavigation navigation = DependencyResolver.Resolve<Navigation.INavigation>();
+
+            navigation.RegisterPage<MainPageView, MainPageVM>();
+            navigation.RegisterPage<YouTubeView, MainPageVM>();
+            navigation.RegisterPage<NavigationMenuView, NavigationMenuVM>();
+
+            navigation.SetStartPage<YouTubeView>();
+            navigation.Init(this);
         }
 
         protected override void OnStart()
