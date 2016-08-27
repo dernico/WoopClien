@@ -8,6 +8,7 @@
            VerticalOptions="Center"
            HorizontalOptions="Center"
           Command="{Binding Navigate}"
+          
   />
 
 </ContentPage>
