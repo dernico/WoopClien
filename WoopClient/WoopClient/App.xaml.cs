@@ -6,7 +6,9 @@ using WoopClient.DependencyInjection;
 using WoopClient.Navigation;
 using WoopClient.Services.Api;
 using WoopClient.ViewModels;
+using WoopClient.ViewModels.Streams;
 using WoopClient.Views;
+using WoopClient.Views.Streams;
 using Xamarin.Forms;
 
 namespace WoopClient
@@ -27,8 +29,10 @@ namespace WoopClient
             navigation.RegisterPage<MainPageView, MainPageVM>();
             navigation.RegisterPage<YouTubeView, MainPageVM>();
             navigation.RegisterPage<NavigationMenuView, NavigationMenuVM>();
+            navigation.RegisterPage<FavoritesView, FavoritsVM>();
 
-            navigation.SetStartPage<YouTubeView>();
+            navigation.SetMainPage<MainPageView>();
+            navigation.SetStartPage<FavoritesView>();
             navigation.Init(this);
         }
 

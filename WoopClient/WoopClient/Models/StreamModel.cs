@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WoopClient.Models;
 
-namespace WoopClient.Services.Api
+namespace WoopClient.Models
 {
-    public interface IStreamsApi
+    public class StreamModel
     {
-        Task<StreamModel[]> GetFavorites();
     }
 }

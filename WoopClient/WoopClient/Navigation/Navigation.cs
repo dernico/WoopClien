@@ -12,7 +12,8 @@ namespace WoopClient.Navigation
     {
         private Application _application;
         private Dictionary<Type, Type> _pagesWithViewModels;
-        private Type _startPage;
+        private Type _startPageType;
+        private Type _mainPageType;
 
         public Navigation()
         {
@@ -32,29 +33,39 @@ namespace WoopClient.Navigation
                     "Make sure to call Navigation.RegisterPage at least once.");
             }
 
-            var firstPage = _pagesWithViewModels.FirstOrDefault();
-            var mainPageView = Activator.CreateInstance(firstPage.Key) as Page;
-            if (firstPage.Key != null)
+
+            var mainPage = _pagesWithViewModels.FirstOrDefault();
+            if (_mainPageType != null)
             {
-                var bindingContext = DependencyResolver.Resolve(firstPage.Value);
-                mainPageView.BindingContext = bindingContext;
+                mainPage = _pagesWithViewModels.FirstOrDefault(p => p.Key == _mainPageType);
+                var mainPageView = Activator.CreateInstance(_mainPageType) as Page;
+                if (mainPage.Value!= null)
+                {
+                    var bindingContext = DependencyResolver.Resolve(mainPage.Value);
+                    mainPageView.BindingContext = bindingContext;
+                }
+                _application.MainPage = mainPageView;
             }
 
-            _application.MainPage = new NavigationPage(mainPageView);
 
-            if(_startPage != null)
+            if(_startPageType != null)
             {
-                NavigateTo(_startPage);
+                NavigateTo(_startPageType);
             }
+        }
+
+        public void SetMainPage<T>() where T : class
+        {
+            AssertPageExist(typeof(T));
+
+            _mainPageType = typeof(T);
         }
 
         public void SetStartPage<T>() where T : class
         {
-            if(!_pagesWithViewModels.Any(p => p.Key == typeof(T)))
-            {
-                throw new KeyNotFoundException("Could not found the page that you want to set as starting page. Register the Page first.");
-            }
-            _startPage = _pagesWithViewModels.FirstOrDefault(p => p.Key == typeof(T)).Key;
+            AssertPageExist(typeof(T));
+
+            _startPageType = typeof(T);
         }
 
         public void ToMainPage()
@@ -107,6 +118,15 @@ namespace WoopClient.Navigation
         public void RegisterPage<T>()
         {
             _pagesWithViewModels.Add(typeof(T), null);
+        }
+
+
+        private void AssertPageExist(Type pageType)
+        {
+            if (!_pagesWithViewModels.Any(p => p.Key == pageType))
+            {
+                throw new KeyNotFoundException("Could not found the page that you want to set as starting page. Register the Page first.");
+            }
         }
                 
     }
