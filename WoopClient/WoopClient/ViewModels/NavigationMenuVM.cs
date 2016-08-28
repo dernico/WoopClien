@@ -7,6 +7,7 @@ using WoopClient.Common;
 using WoopClient.Models;
 using WoopClient.Navigation;
 using WoopClient.Views;
+using WoopClient.Views.Streams;
 
 namespace WoopClient.ViewModels
 {
@@ -30,10 +31,16 @@ namespace WoopClient.ViewModels
                     _navigationItems = new List<NavigationMenuItem> {
                         new NavigationMenuItem
                         {
-                            Title = "Notes",
+                            Title = "Streams - Favorites",
                             IconSource = "",
-                            TargetType = typeof(YouTubeView)
-                        }
+                            TargetType = typeof(FavoritesView)
+                        },
+                        new NavigationMenuItem
+                        {
+                            Title = "Streams - Search",
+                            IconSource = "",
+                            TargetType = typeof(SearchView)
+                        },
                     };
                 }
                 return _navigationItems;
@@ -51,9 +58,11 @@ namespace WoopClient.ViewModels
             set
             {
                 _selectedNavigationItem = value;
-                //_navigation.navigatePage(_selectedNavigationItem);
-                //_selectedNavigationItem = null;
-                //_nav.NavigateTo(_selectedNavigationItem);
+                if(_selectedNavigationItem != null)
+                {
+                    _nav.NavigateTo(_selectedNavigationItem.TargetType);
+                }
+                _selectedNavigationItem = null;
                 Changed("SelectedNavigationItem");
             }
         }

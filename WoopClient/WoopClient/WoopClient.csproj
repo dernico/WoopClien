@@ -43,7 +43,6 @@
     <Compile Include="DependencyInjection\DependencyResolver.cs" />
     <Compile Include="Models\NavigationMenuItem.cs" />
     <Compile Include="Models\StreamModel.cs" />
-    <Compile Include="Navigation\PageAndViewModel.cs" />
     <Compile Include="Services\Api\ApiConfig.cs" />
     <Compile Include="Services\Api\ISchlingel.cs" />
     <Compile Include="Services\Api\IStreamsApi.cs" />
@@ -53,6 +52,7 @@
     <Compile Include="ViewModels\MainPageVM.cs" />
     <Compile Include="ViewModels\NavigationMenuVM.cs" />
     <Compile Include="ViewModels\Streams\FavoritsVM.cs" />
+    <Compile Include="ViewModels\Streams\SearchVM.cs" />
     <Compile Include="Views\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
     </Compile>
@@ -64,6 +64,9 @@
     </Compile>
     <Compile Include="Views\Streams\FavoritesView.xaml.cs">
       <DependentUpon>FavoritesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Streams\SearchView.xaml.cs">
+      <DependentUpon>SearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\YouTubeView.xaml.cs">
       <DependentUpon>YouTubeView.xaml</DependentUpon>
@@ -115,6 +118,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Streams\FavoritesView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Streams\SearchView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

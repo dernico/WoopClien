@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WoopClient.Models;
 using Xamarin.Forms;
 
 namespace WoopClient.Navigation
@@ -42,6 +43,7 @@ namespace WoopClient.Navigation
         /// </summary>
         /// <typeparam name="T"></typeparam>
         void NavigateTo<T>() where T : class;
+        void NavigateTo(Type pageType);
 
         /// <summary>
         /// Register a Page and the corresponding Viewmodel.

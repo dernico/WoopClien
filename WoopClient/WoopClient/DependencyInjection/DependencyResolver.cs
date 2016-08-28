@@ -62,7 +62,7 @@ namespace WoopClient.DependencyInjection
 
                         foreach (var p in parameters)
                         {
-                            var service = GetInstanceForInterface(p.ParameterType);
+                            var service = GetInstanceOf(p.ParameterType);
                             ctorParams.Add(service);
                         }
                     }
@@ -77,11 +77,6 @@ namespace WoopClient.DependencyInjection
         private static object GetInstanceForInterface(Type interfaceType)
         {
             object service = null;
-
-            //if (parameterInfo.ParameterType == typeof(INavigation))
-            //{
-            //    return this;
-            //}
 
             if (!_instances.TryGetValue(interfaceType, out service))
             {

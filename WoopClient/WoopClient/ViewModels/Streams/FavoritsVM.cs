@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WoopClient.Common;
+using WoopClient.Models;
 using WoopClient.Services.Api;
 
 namespace WoopClient.ViewModels.Streams
 {
-    public class FavoritsVM
+    public class FavoritsVM : BaseViewModel
     {
         private readonly IStreamsApi _streams;
 
@@ -19,7 +21,21 @@ namespace WoopClient.ViewModels.Streams
 
         private async void Init()
         {
-            await _streams.GetFavorites();
+            FavoriteStreams = await _streams.GetFavorites();
+        }
+
+        private StreamModel[] _favoriteStreams;
+        public StreamModel[] FavoriteStreams
+        {
+            get
+            {
+                return _favoriteStreams;
+            }
+            set
+            {
+                _favoriteStreams = value;
+                Changed("FavoriteStreams");
+            }
         }
     }
 }

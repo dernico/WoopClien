@@ -82,7 +82,7 @@ namespace WoopClient.Navigation
             NavigateTo(typeof(T));
         }
         
-        private void NavigateTo(Type pageType)
+        public void NavigateTo(Type pageType)
         {
             Page navigationSourcePage = _application.MainPage;
             if (_application.MainPage is MasterDetailPage)

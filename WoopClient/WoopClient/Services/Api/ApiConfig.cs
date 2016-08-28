@@ -11,6 +11,7 @@ namespace WoopClient.Services.Api
     {
         private const string BaseUrl = "http://woop:8000/";
 
-        public const string Streams_Favorites = BaseUrl + "api/music/streams";
+        internal const string Streams_Favorites = BaseUrl + "api/music/streams";
+        internal const string Stream_Search = BaseUrl + "api/tunein/search";
     }
 }

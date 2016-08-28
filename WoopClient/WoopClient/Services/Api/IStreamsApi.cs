@@ -10,5 +10,6 @@ namespace WoopClient.Services.Api
     public interface IStreamsApi
     {
         Task<StreamModel[]> GetFavorites();
+        Task<StreamModel[]> Search(string query);
     }
 }

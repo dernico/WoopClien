@@ -30,6 +30,7 @@ namespace WoopClient
             navigation.RegisterPage<YouTubeView, MainPageVM>();
             navigation.RegisterPage<NavigationMenuView, NavigationMenuVM>();
             navigation.RegisterPage<FavoritesView, FavoritsVM>();
+            navigation.RegisterPage<SearchView, SearchVM>();
 
             navigation.SetMainPage<MainPageView>();
             navigation.SetStartPage<FavoritesView>();
