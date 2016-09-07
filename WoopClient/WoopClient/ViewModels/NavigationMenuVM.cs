@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Woop.Xamarin.Navigaton;
 using WoopClient.Common;
 using WoopClient.Models;
-using WoopClient.Navigation;
 using WoopClient.Views;
 using WoopClient.Views.Streams;
 

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WoopClient.DependencyInjection;
+using Woop.Xamarin.Navigaton;
+using Woop.Xamarin.Navigaton.DependencyInjection;
 using WoopClient.ViewModels;
 using Xamarin.Forms;
 
@@ -14,7 +15,7 @@ namespace WoopClient.Views
         public MainPageView()
         {
             InitializeComponent();
-            var nav = DependencyResolver.Resolve<Navigation.INavigation>();
+            var nav = DependencyResolver.Resolve<Woop.Xamarin.Navigaton.INavigation>();
 
             var navigationVM = DependencyResolver.CreateInstance<NavigationMenuVM>();
             var navigationMenu = new NavigationMenuView(navigationVM);

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WoopClient.DependencyInjection;
-using WoopClient.Navigation;
+﻿using Woop.Xamarin.Navigaton;
+using Woop.Xamarin.Navigaton.DependencyInjection;
 using WoopClient.Services.Api;
 using WoopClient.ViewModels;
 using WoopClient.ViewModels.Streams;
 using WoopClient.Views;
 using WoopClient.Views.Streams;
 using Xamarin.Forms;
+using INavigation = Woop.Xamarin.Navigaton.INavigation;
 
 namespace WoopClient
 {
@@ -18,13 +15,12 @@ namespace WoopClient
         public App()
         {
             InitializeComponent();
-
-            DependencyResolver.RegisterService<Navigation.Navigation>();
+            
             DependencyResolver.RegisterService<SchlingelApi>();
             DependencyResolver.RegisterService<StreamsApi>();
 
 
-            Navigation.INavigation navigation = DependencyResolver.Resolve<Navigation.INavigation>();
+            var navigation = DependencyResolver.Resolve<INavigation>();
 
             navigation.RegisterPage<MainPageView, MainPageVM>();
             navigation.RegisterPage<YouTubeView, MainPageVM>();

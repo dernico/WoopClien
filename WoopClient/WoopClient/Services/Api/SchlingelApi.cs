@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WoopClient.Services.Api;
 
-[assembly: Xamarin.Forms.Dependency(typeof(SchlingelApi))]
 namespace WoopClient.Services.Api
 {
     public class SchlingelApi : ISchlingel

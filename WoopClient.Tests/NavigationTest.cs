@@ -1,8 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WoopClient.Navigation;
-using Windows.UI.Xaml.Controls;
-using WoopClient.Services.Api;
 
 namespace WoopClient.Tests
 {

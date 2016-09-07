@@ -129,7 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WoopClient\WoopClient.csproj">
-      <Project>{FE743100-1FC5-4806-BA0A-C02D9E94D06D}</Project>
+      <Project>{fe743100-1fc5-4806-ba0a-c02d9e94d06d}</Project>
       <Name>WoopClient</Name>
     </ProjectReference>
   </ItemGroup>
