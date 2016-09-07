@@ -15,21 +15,21 @@ namespace WoopClient
         public App()
         {
             InitializeComponent();
-            
+
             DependencyResolver.RegisterService<SchlingelApi>();
             DependencyResolver.RegisterService<StreamsApi>();
+            
+            var navigation = new Navigation();
 
-
-            var navigation = DependencyResolver.Resolve<INavigation>();
-
-            navigation.RegisterPage<MainPageView, MainPageVM>();
-            navigation.RegisterPage<YouTubeView, MainPageVM>();
+            navigation.RegisterPage<MainPageView>();
+            navigation.RegisterPage<YouTubeView>();
             navigation.RegisterPage<NavigationMenuView, NavigationMenuVM>();
             navigation.RegisterPage<FavoritesView, FavoritsVM>();
             navigation.RegisterPage<SearchView, SearchVM>();
 
+            navigation.RegisterMasterDetailPage<MainPageView, NavigationMenuView, FavoritesView>();
+
             navigation.SetMainPage<MainPageView>();
-            navigation.SetStartPage<FavoritesView>();
             navigation.Init(this);
         }
 

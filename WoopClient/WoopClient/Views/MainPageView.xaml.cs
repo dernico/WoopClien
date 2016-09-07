@@ -15,10 +15,6 @@ namespace WoopClient.Views
         public MainPageView()
         {
             InitializeComponent();
-            var navigationVM = DependencyResolver.CreateInstance<NavigationMenuVM>();
-            var navigationMenu = new NavigationMenuView(navigationVM);
-            Master = navigationMenu;
-            Detail = new NavigationPage() { Title = "Hello"};
         }
     }
 }

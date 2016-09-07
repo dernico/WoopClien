@@ -10,10 +10,9 @@ namespace WoopClient.Views
 {
     public partial class NavigationMenuView : ContentPage
     {
-        public NavigationMenuView(NavigationMenuVM vm)
+        public NavigationMenuView()
         {
             InitializeComponent();
-            BindingContext = vm;
         }
     }
 }

@@ -6,21 +6,28 @@ using Xamarin.Forms;
 
 namespace Woop.Xamarin.Navigaton
 {
+    public class MasterDetailTypes
+    {
+        public Type Master { get; set; }
+        public Type Detail { get; set; }
+    }
+
     public class Navigation : INavigation
     {
         private Application _application;
         private readonly Dictionary<Type, Type> _pagesWithViewModels;
+        private readonly Dictionary<Type, MasterDetailTypes> _masterDetailPages;
         private Type _startPageType;
         private Type _mainPageType;
 
         public Navigation()
         {
             _pagesWithViewModels = new Dictionary<Type, Type>();
-            //Register myself so that others can get injected myself
+            _masterDetailPages = new Dictionary<Type, MasterDetailTypes>();
+            // register myself so otheres can get me injected.
             DependencyResolver.RegisterService<Navigation>();
         }
         
-
         public void Init(Application formsApplication)
         {
             Guard.AssertIsNull(formsApplication);
@@ -34,16 +41,9 @@ namespace Woop.Xamarin.Navigaton
             }
 
 
-            var mainPage = _pagesWithViewModels.FirstOrDefault();
             if (_mainPageType != null)
             {
-                mainPage = _pagesWithViewModels.FirstOrDefault(p => p.Key == _mainPageType);
-                var mainPageView = Activator.CreateInstance(_mainPageType) as Page;
-                if (mainPage.Value!= null)
-                {
-                    var bindingContext = DependencyResolver.Resolve(mainPage.Value);
-                    mainPageView.BindingContext = bindingContext;
-                }
+                var mainPageView = CreatePage(_mainPageType);
                 _application.MainPage = mainPageView;
             }
 
@@ -54,32 +54,32 @@ namespace Woop.Xamarin.Navigaton
             }
         }
 
-        public void SetMainPage<T>() where T : class
+        public void SetMainPage<TPage>() where TPage : class
         {
-            AssertPageExist(typeof(T));
+            AssertPageExist(typeof(TPage));
 
-            _mainPageType = typeof(T);
+            _mainPageType = typeof(TPage);
         }
 
-        public void SetStartPage<T>() where T : class
+        public void SetStartPage<TPage>() where TPage : class
         {
-            AssertPageExist(typeof(T));
+            AssertPageExist(typeof(TPage));
 
-            _startPageType = typeof(T);
+            _startPageType = typeof(TPage);
         }
 
         public void ToMainPage()
         {
             _application.MainPage.Navigation.PopToRootAsync();
         }
-        
+
         /// <summary>
         /// Navigates to the page from the T value. Navigation source is the Application.MainPage
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public void NavigateTo<T>() where T : class
+        /// <typeparam name="TPage"></typeparam>
+        public void NavigateTo<TPage>() where TPage : class
         {
-            NavigateTo(typeof(T));
+            NavigateTo(typeof(TPage));
         }
         
         public void NavigateTo(Type pageType)
@@ -91,14 +91,9 @@ namespace Woop.Xamarin.Navigaton
                 navigationSourcePage = masterDetails.Detail;
             }
 
-            Type viewModelType = null;
-            if (_pagesWithViewModels.TryGetValue(pageType, out viewModelType))
+            var newPage = CreatePage(pageType);
+            if (newPage != null)
             {
-                var newPage = Activator.CreateInstance(pageType) as Page;
-                if (viewModelType != null)
-                {
-                    newPage.BindingContext = DependencyResolver.Resolve(viewModelType);
-                }
                 navigationSourcePage.Navigation.PushAsync(new NavigationPage(newPage));
             }
             else
@@ -108,24 +103,83 @@ namespace Woop.Xamarin.Navigaton
             }
         }
 
-        public void RegisterPage<T, V>()
-            where T : class
-            where V : class
+        public void RegisterPage<TPage, TViewModel>()
+            where TPage : class
+            where TViewModel : class
         {
-            _pagesWithViewModels.Add(typeof(T), typeof(V));
+            _pagesWithViewModels.Add(typeof(TPage), typeof(TViewModel));
         }
 
-        public void RegisterPage<T>()
+        public void RegisterPage<TPage>()
         {
-            _pagesWithViewModels.Add(typeof(T), null);
+            _pagesWithViewModels.Add(typeof(TPage), null);
         }
 
+        public void RegisterMasterDetailPage<TMasterDetailPage, TMaster, TDetail>()
+        {
+            var masterDetailType = typeof(TMasterDetailPage);
+            var masterType = typeof(TMaster);
+            var detailType = typeof(TDetail);
+
+            AssertPageExist(masterDetailType);
+            AssertPageExist(masterType);
+            AssertPageExist(detailType);
+
+            _masterDetailPages.Add(masterDetailType, new MasterDetailTypes {Master = masterType, Detail = detailType });
+            
+        }
+
+        private Page CreatePage(Type pageType)
+        {
+            Page page;
+
+            if (_masterDetailPages.ContainsKey(pageType))
+            {
+                var masterDetail = _masterDetailPages[pageType];
+                page = CreateMasterDetailPage(pageType, masterDetail.Master, masterDetail.Detail);
+            }
+            else
+            {
+                page = CreatePageWithViewModel(pageType);
+            }
+            return page;
+        }
+
+
+        private Page CreatePageWithViewModel(Type pageType)
+        {
+            Page newPage = null;
+            Type viewModelType;
+            if (_pagesWithViewModels.TryGetValue(pageType, out viewModelType))
+            {
+                newPage = Activator.CreateInstance(pageType) as Page;
+                if (newPage != null && viewModelType != null)
+                {
+                    newPage.BindingContext = DependencyResolver.Resolve(viewModelType);
+                }
+            }
+            return newPage;
+        }
+
+        private MasterDetailPage CreateMasterDetailPage(Type masterDetailType, Type masterType, Type detailType)
+        {
+            var masterDetailPage = CreatePageWithViewModel(masterDetailType) as MasterDetailPage;
+            if (masterDetailPage != null)
+            {
+                var masterPage = CreatePageWithViewModel(masterType);
+                var detailPage = CreatePageWithViewModel(detailType);
+
+                masterDetailPage.Master = masterPage;
+                masterDetailPage.Detail = new NavigationPage( detailPage );
+            }
+            return masterDetailPage;
+        }
 
         private void AssertPageExist(Type pageType)
         {
             if (!_pagesWithViewModels.Any(p => p.Key == pageType))
             {
-                throw new KeyNotFoundException("Could not found the page that you want to set as starting page. Register the Page first.");
+                throw new KeyNotFoundException("Could not found the page that you want to set. Register the Page first.");
             }
         }
                 
