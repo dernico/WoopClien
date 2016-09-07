@@ -15,8 +15,6 @@ namespace WoopClient.Views
         public MainPageView()
         {
             InitializeComponent();
-            var nav = DependencyResolver.Resolve<Woop.Xamarin.Navigaton.INavigation>();
-
             var navigationVM = DependencyResolver.CreateInstance<NavigationMenuVM>();
             var navigationMenu = new NavigationMenuView(navigationVM);
             Master = navigationMenu;
